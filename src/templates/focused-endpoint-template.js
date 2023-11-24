@@ -10,9 +10,14 @@ import serverTemplate from '~/templates/server-template';
 import securitySchemeTemplate from '~/templates/security-scheme-template';
 import { expandCollapseNavBarTag } from '~/templates/navbar-template';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 function headingRenderer(tagElementId) {
   const renderer = new marked.Renderer();
-  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${tagElementId}--${slugger.slug(raw)}">${text}</h${level}>`);
+  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${encodeIfChinese(tagElementId)}--${encodeIfChinese(slugger.slug(raw))}">${text}</h${level}>`);
   return renderer;
 }
 

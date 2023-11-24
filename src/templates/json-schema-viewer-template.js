@@ -11,6 +11,11 @@ import '~/components/schema-tree';
 import SetTheme from '~/utils/theme';
 import { isValidHexColor } from '~/utils/color-utils';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 /* eslint-disable indent */
 // Json Schema Nav Template
 function jsonSchemaNavTemplate() {
@@ -30,7 +35,7 @@ function jsonSchemaNavTemplate() {
     </div>
     <nav style="flex:1" class='nav-scroll' part="section-navbar-scroll">
       ${this.resolvedSpec.schemaAndExamples.map((v) => html`
-        <div class='nav-bar-path' data-content-id='${v.elementId}' id='link-${v.elementId}'
+        <div class='nav-bar-path' data-content-id='${encodeIfChinese(v.elementId)}' id='link-${v.elementId}'
           @click = '${(e) => {
             this.scrollToEventTarget(e, false);
           }}'

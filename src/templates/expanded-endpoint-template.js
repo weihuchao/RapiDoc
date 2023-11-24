@@ -8,10 +8,15 @@ import callbackTemplate from '~/templates/callback-template';
 import '~/components/api-request';
 import '~/components/api-response';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 /* eslint-disable indent */
 function headingRenderer(tagElementId) {
   const renderer = new marked.Renderer();
-  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${tagElementId}--${slugger.slug(raw)}">${text}</h${level}>`);
+  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${encodeIfChinese(tagElementId)}--${encodeIfChinese(slugger.slug(raw))}">${text}</h${level}>`);
   return renderer;
 }
 
@@ -53,7 +58,7 @@ export function expandedEndpointBodyTemplate(path, tagName = '', tagDescription 
   const codeSampleTabPanel = path.xCodeSamples ? codeSamplesTemplate.call(this, path.xCodeSamples) : '';
   return html`
     ${this.renderStyle === 'read' ? html`<div class='divider' part="operation-divider"></div>` : ''}
-    <div class='expanded-endpoint-body observe-me ${path.method} ${path.deprecated ? 'deprecated' : ''} ' part="section-operation ${path.elementId}" id='${path.elementId}'>
+    <div class='expanded-endpoint-body observe-me ${path.method} ${path.deprecated ? 'deprecated' : ''} ' part="section-operation ${path.elementId}" id='${encodeIfChinese(path.elementId)}'>
       ${(this.renderStyle === 'focused' && tagName !== 'General ⦂')
         ? html`
           <div class="tag-container" part="section-operation-tag"> 
@@ -173,7 +178,7 @@ export default function expandedEndpointTemplate() {
   if (!this.resolvedSpec) { return ''; }
   return html`
   ${this.resolvedSpec.tags.map((tag) => html`
-    <section id="${tag.elementId}" part="section-tag" class="regular-font section-gap--read-mode observe-me" style="border-top:1px solid var(--primary-color);">
+    <section id="${encodeIfChinese(tag.elementId)}" part="section-tag" class="regular-font section-gap--read-mode observe-me" style="border-top:1px solid var(--primary-color);">
       <div class="title tag" part="section-tag-title label-tag-title">${tag.name}</div>
       <slot name="${tag.elementId}"></slot>
       <div class="regular-font-size">

@@ -56,7 +56,7 @@ const commonPlugins = [
 
 if (process.env.NODE_ENV === 'production') {
   console.log('BUILDING FOR PRODUCTION ... '); // eslint-disable-line no-console
-  commonPlugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
+  // commonPlugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
   commonPlugins.push(new DuplicatesPlugin({ emitErrors: false, verbose: true }));
   commonPlugins.push(new UnminifiedWebpackPlugin());
   commonPlugins.push(new webpack.BannerPlugin({

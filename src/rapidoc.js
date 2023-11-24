@@ -29,6 +29,11 @@ import mainBodyTemplate from '~/templates/main-body-template';
 import { applyApiKey, onClearAllApiKeys } from '~/templates/security-scheme-template';
 import { setApiServer } from '~/templates/server-template';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 export default class RapiDoc extends LitElement {
   constructor() {
     super();
@@ -543,7 +548,7 @@ export default class RapiDoc extends LitElement {
 
   infoDescriptionHeadingRenderer() {
     const renderer = new marked.Renderer();
-    renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${slugger.slug(raw)}">${text}</h${level}>`);
+    renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="${encodeIfChinese(slugger.slug(raw))}">${text}</h${level}>`);
     return renderer;
   }
 

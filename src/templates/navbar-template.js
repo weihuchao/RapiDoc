@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { marked } from 'marked';
 import { pathIsInSearch } from '~/utils/common-utils';
+// import { encodeIfChinese } from '~/utils/fix';
 
 export function expandCollapseNavBarTag(navLinkEl, action = 'toggle') {
   const tagAndPathEl = navLinkEl?.closest('.nav-bar-tag-and-paths');
@@ -50,6 +51,11 @@ export function navBarClickAndEnterHandler(event) {
   } else if (navEl.dataset?.action === 'expand-collapse-tag') {
     expandCollapseNavBarTag(navEl, 'toggle');
   }
+}
+
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
 }
 
 /* eslint-disable indent */
@@ -120,7 +126,7 @@ export default function navbarTemplate() {
                     class='nav-bar-h${header.depth} ${this.navActiveItemMarker}' 
                     id='link-overview--${new marked.Slugger().slug(header.text)}'
                     data-action='navigate' 
-                    data-content-id='overview--${new marked.Slugger().slug(header.text)}' 
+                    data-content-id='overview--${encodeIfChinese(new marked.Slugger().slug(header.text))}' 
                   >
                     ${header.text}
                   </div>`)
@@ -177,7 +183,7 @@ export default function navbarTemplate() {
                   part='section-navbar-item section-navbar-tag'
                   id='link-${tag.elementId}'
                   data-action='${(this.renderStyle === 'read' ? 'navigate' : this.onNavTagClick === 'show-description') ? 'navigate' : 'expand-collapse-tag'}'
-                  data-content-id='${(this.renderStyle === 'read' ? `${tag.elementId}` : this.onNavTagClick === 'show-description') ? `${tag.elementId}` : ''}'
+                  data-content-id='${(this.renderStyle === 'read' ? `${encodeIfChinese(tag.elementId)}` : this.onNavTagClick === 'show-description') ? `${encodeIfChinese(tag.elementId)}` : ''}'
                   data-first-path-id='${tag.firstPathId}'
                   tabindex='0'
                 >
@@ -198,7 +204,7 @@ export default function navbarTemplate() {
                         part='section-navbar-item section-navbar-h${header.depth}'
                         id='link-${tag.elementId}--${new marked.Slugger().slug(header.text)}'
                         data-action='navigate'
-                        data-content-id='${tag.elementId}--${new marked.Slugger().slug(header.text)}'
+                        data-content-id='${tag.elementId}--${encodeIfChinese(new marked.Slugger().slug(header.text))}'
                         tabindex='0'
                       > ${header.text}</div>`)}
                     </div>`
@@ -217,7 +223,7 @@ export default function navbarTemplate() {
                 class='nav-bar-path ${this.navActiveItemMarker} ${this.usePathInNavBar === 'true' ? 'small-font' : ''}'
                 part='section-navbar-item section-navbar-path'
                 data-action='navigate'
-                data-content-id='${p.elementId}'
+                data-content-id='${encodeIfChinese(p.elementId)}'
                 id='link-${p.elementId}'
                 tabindex='0'
               >
@@ -250,13 +256,13 @@ export default function navbarTemplate() {
               <div class='nav-bar-tag'
                 part='section-navbar-item section-navbar-tag'
                 data-action='navigate' 
-                data-content-id='cmp--${component.name.toLowerCase()}' 
+                data-content-id='cmp--${encodeIfChinese(component.name.toLowerCase())}' 
                 id='link-cmp--${component.name.toLowerCase()}'
               >
                 ${component.name}
               </div>
               ${component.subComponents.filter((p) => p.expanded !== false).map((p) => html`
-                <div class='nav-bar-path' data-action='navigate' data-content-id='cmp--${p.id}' id='link-cmp--${p.id}'>
+                <div class='nav-bar-path' data-action='navigate' data-content-id='cmp--${encodeIfChinese(p.id)}' id='link-cmp--${p.id}'>
                   <span style = 'pointer-events: none;'> ${p.name} </span>
                 </div>`)
               }`

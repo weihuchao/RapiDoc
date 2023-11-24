@@ -1,6 +1,11 @@
 import { html } from 'lit';
 import '~/components/dialog-box';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 /* eslint-disable indent */
 export default function searchByPropertiesModalTemplate() {
   document.addEventListener('close', () => { this.showAdvancedSearchDialog = false; });
@@ -37,10 +42,6 @@ export default function searchByPropertiesModalTemplate() {
             <input style="cursor:pointer;" type="checkbox" part="checkbox checkbox-search-dialog" id="search-api-request-body" @change = "${(e) => this.onAdvancedSearch(e, 0)}">
             <label style="cursor:pointer;" for="search-api-request-body"> Request Body Parameters </label>
           </div>
-          <div style="margin-left: 16px;">
-            <input style="cursor:pointer;" type="checkbox" part="checkbox checkbox-search-dialog" id="search-api-resp-descr" @change = "${(e) => this.onAdvancedSearch(e, 0)}">
-            <label style="cursor:pointer;" for="search-api-resp-descr"> Response Description </label>
-          </div>
         </div>
       </span>
       
@@ -48,7 +49,7 @@ export default function searchByPropertiesModalTemplate() {
       <div
         class="mono-font small-font-size hover-bg"
         style='padding: 5px; cursor: pointer; border-bottom: 1px solid var(--light-border-color); ${path.deprecated ? 'filter:opacity(0.5);' : ''}' 
-        data-content-id='${path.elementId}'
+        data-content-id='${encodeIfChinese(path.elementId)}'
         tabindex = '0'
         @click="${
           (e) => {

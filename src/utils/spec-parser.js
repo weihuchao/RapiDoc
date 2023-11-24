@@ -162,6 +162,11 @@ function getHeadersFromMarkdown(markdownContent) {
   return headers || [];
 }
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 function getComponents(openApiSpec) {
   if (!openApiSpec.components) {
     return [];
@@ -244,7 +249,7 @@ function groupByTags(openApiSpec, sortEndpointsBy, generateMissingTags = false, 
   const tags = openApiSpec.tags && Array.isArray(openApiSpec.tags)
     ? openApiSpec.tags.map((v) => ({
       show: true,
-      elementId: `tag--${v.name.replace(invalidCharsRegEx, '-')}`,
+      elementId: `tag--${encodeIfChinese(v.name.replace(invalidCharsRegEx, '-'))}`,
       name: v.name,
       description: v.description || '',
       headers: v.description ? getHeadersFromMarkdown(v.description) : [],
@@ -300,7 +305,7 @@ function groupByTags(openApiSpec, sortEndpointsBy, generateMissingTags = false, 
           if (!tagObj) {
             tagObj = {
               show: true,
-              elementId: `tag--${tag.replace(invalidCharsRegEx, '-')}`,
+              elementId: `tag--${encodeIfChinese(tag.replace(invalidCharsRegEx, '-'))}`,
               name: tag,
               description: specTagsItem?.description || '',
               headers: specTagsItem?.description ? getHeadersFromMarkdown(specTagsItem.description) : [],

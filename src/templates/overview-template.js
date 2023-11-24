@@ -3,10 +3,15 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js'; // eslint-disable-li
 import { marked } from 'marked';
 import { downloadResource, viewResource } from '~/utils/common-utils';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 /* eslint-disable indent */
 function headingRenderer() {
   const renderer = new marked.Renderer();
-  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="overview--${slugger.slug(raw)}">${text}</h${level}>`);
+  renderer.heading = ((text, level, raw, slugger) => `<h${level} class="observe-me" id="overview--${encodeIfChinese(slugger.slug(raw))}">${text}</h${level}>`);
   return renderer;
 }
 

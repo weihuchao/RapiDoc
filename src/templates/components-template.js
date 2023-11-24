@@ -6,10 +6,15 @@ import '~/components/json-tree';
 import '~/components/schema-tree';
 import '~/components/schema-table';
 
+function encodeIfChinese(str) {
+  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
+  return hasChinese ? encodeURIComponent(str) : str;
+}
+
 function schemaBodyTemplate(sComponent) {
   return html`
   <div class='divider'></div>
-  <div class='expanded-endpoint-body observe-me ${sComponent.name}' id='cmp--${sComponent.id}' >
+  <div class='expanded-endpoint-body observe-me ${sComponent.name}' id='cmp--${encodeIfChinese(sComponent.id)}' >
     <div style="font-weight:bold"> ${sComponent.name} <span style="color:var(--light-fg); font-size:var(--font-size-small); font-weight:400;"> Schema </span></div>
   ${this.schemaStyle === 'table'
     ? html`
@@ -42,7 +47,7 @@ function componentBodyTemplate(sComponent, componentType) {
   }
   return html`
   <div class='divider'></div>
-  <div class='expanded-endpoint-body observe-me ${sComponent.name}' id='cmp--${sComponent.id}' >
+  <div class='expanded-endpoint-body observe-me ${sComponent.name}' id='cmp--${encodeIfChinese(sComponent.id)}' >
     ${html`
       <div style="font-weight:bold"> ${sComponent.name} <span style="color:var(--light-fg); font-size:var(--font-size-small); font-weight:400"> ${componentType} </span> </div>
       ${sComponent.component
@@ -60,7 +65,7 @@ export default function componentsTemplate() {
   if (!this.resolvedSpec) { return ''; }
   return html`
   ${this.resolvedSpec.components.map((component) => html`
-    <div id="cmp--${component.name.toLowerCase()}" class='regular-font section-gap--read-mode observe-me' style="border-top:1px solid var(--primary-color);">
+    <div id="cmp--${encodeIfChinese(component.name.toLowerCase())}" class='regular-font section-gap--read-mode observe-me' style="border-top:1px solid var(--primary-color);">
       <div class="title tag">${component.name}</div>
       <div class="regular-font-size">
         ${unsafeHTML(`<div class='m-markdown regular-font'>${marked(component.description ? component.description : '')}</div>`)}
