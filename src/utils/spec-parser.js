@@ -2,6 +2,7 @@
 import OpenApiParser from '@apitools/openapi-parser';
 import { marked } from 'marked';
 import { invalidCharsRegEx, rapidocApiKey, sleep } from '~/utils/common-utils';
+import encodeIfChinese from '~/utils/fix';
 
 export default async function ProcessSpec(specUrl, generateMissingTags = false, sortTags = false, sortEndpointsBy = '', attrApiKey = '', attrApiKeyLocation = '', attrApiKeyValue = '', serverUrl = '') {
   let jsonParsedSpec;
@@ -160,11 +161,6 @@ function getHeadersFromMarkdown(markdownContent) {
   const tokens = marked.lexer(markdownContent);
   const headers = tokens.filter((v) => v.type === 'heading' && v.depth <= 2);
   return headers || [];
-}
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
 }
 
 function getComponents(openApiSpec) {

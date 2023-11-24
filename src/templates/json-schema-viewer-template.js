@@ -10,11 +10,7 @@ import '~/components/json-tree';
 import '~/components/schema-tree';
 import SetTheme from '~/utils/theme';
 import { isValidHexColor } from '~/utils/color-utils';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 /* eslint-disable indent */
 // Json Schema Nav Template

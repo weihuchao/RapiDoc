@@ -5,11 +5,7 @@ import { schemaInObjectNotation } from '~/utils/schema-utils';
 import '~/components/json-tree';
 import '~/components/schema-tree';
 import '~/components/schema-table';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 function schemaBodyTemplate(sComponent) {
   return html`

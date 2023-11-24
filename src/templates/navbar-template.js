@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { marked } from 'marked';
 import { pathIsInSearch } from '~/utils/common-utils';
-// import { encodeIfChinese } from '~/utils/fix';
+import encodeIfChinese from '~/utils/fix';
 
 export function expandCollapseNavBarTag(navLinkEl, action = 'toggle') {
   const tagAndPathEl = navLinkEl?.closest('.nav-bar-tag-and-paths');
@@ -51,11 +51,6 @@ export function navBarClickAndEnterHandler(event) {
   } else if (navEl.dataset?.action === 'expand-collapse-tag') {
     expandCollapseNavBarTag(navEl, 'toggle');
   }
-}
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
 }
 
 /* eslint-disable indent */

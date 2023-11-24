@@ -25,14 +25,10 @@ import CustomStyles from '~/styles/custom-styles';
 // import { expandCollapseNavBarTag } from '@/templates/navbar-template';
 import { advancedSearch, pathIsInSearch, componentIsInSearch, rapidocApiKey, sleep } from '~/utils/common-utils';
 import ProcessSpec from '~/utils/spec-parser';
+import encodeIfChinese from '~/utils/fix';
 import mainBodyTemplate from '~/templates/main-body-template';
 import { applyApiKey, onClearAllApiKeys } from '~/templates/security-scheme-template';
 import { setApiServer } from '~/templates/server-template';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
 
 export default class RapiDoc extends LitElement {
   constructor() {
@@ -531,6 +527,9 @@ export default class RapiDoc extends LitElement {
         }
         return code;
       },
+    });
+    marked.setOptions({
+      silent: true,
     });
 
     window.addEventListener('hashchange', () => {

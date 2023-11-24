@@ -1,10 +1,6 @@
 import { html } from 'lit';
 import '~/components/dialog-box';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 /* eslint-disable indent */
 export default function searchByPropertiesModalTemplate() {

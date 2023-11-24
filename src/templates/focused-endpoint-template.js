@@ -9,11 +9,7 @@ import overviewTemplate from '~/templates/overview-template';
 import serverTemplate from '~/templates/server-template';
 import securitySchemeTemplate from '~/templates/security-scheme-template';
 import { expandCollapseNavBarTag } from '~/templates/navbar-template';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 function headingRenderer(tagElementId) {
   const renderer = new marked.Renderer();

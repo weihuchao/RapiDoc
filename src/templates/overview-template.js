@@ -2,11 +2,7 @@ import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'; // eslint-disable-line import/extensions
 import { marked } from 'marked';
 import { downloadResource, viewResource } from '~/utils/common-utils';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 /* eslint-disable indent */
 function headingRenderer() {

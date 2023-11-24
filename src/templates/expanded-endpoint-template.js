@@ -7,11 +7,7 @@ import codeSamplesTemplate from '~/templates/code-samples-template';
 import callbackTemplate from '~/templates/callback-template';
 import '~/components/api-request';
 import '~/components/api-response';
-
-function encodeIfChinese(str) {
-  const hasChinese = /[\u4e00-\u9fa5]/.test(str);
-  return hasChinese ? encodeURIComponent(str) : str;
-}
+import encodeIfChinese from '~/utils/fix';
 
 /* eslint-disable indent */
 function headingRenderer(tagElementId) {
