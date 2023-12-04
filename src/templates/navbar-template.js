@@ -5,15 +5,20 @@ import encodeIfChinese from '~/utils/fix';
 
 export function expandCollapseNavBarTag(navLinkEl, action = 'toggle') {
   const tagAndPathEl = navLinkEl?.closest('.nav-bar-tag-and-paths');
-  const pathsUnderTagEl = tagAndPathEl?.querySelector('.nav-bar-paths-under-tag');
+  const pathsUnderTagEls = tagAndPathEl?.querySelectorAll('.nav-bar-paths-under-tag');
   if (tagAndPathEl) {
     const isExpanded = tagAndPathEl.classList.contains('expanded');
     if (isExpanded && (action === 'toggle' || action === 'collapse')) {
-      pathsUnderTagEl.style.maxHeight = 0;
+      pathsUnderTagEls.forEach((el) => {
+        el.style.maxHeight = 0;
+      });
       tagAndPathEl.classList.replace('expanded', 'collapsed');
     } else if (!isExpanded && (action === 'toggle' || action === 'expand')) {
       tagAndPathEl.classList.replace('collapsed', 'expanded');
-      pathsUnderTagEl.style.maxHeight = `${pathsUnderTagEl.scrollHeight}px`;
+      pathsUnderTagEls.forEach((el) => {
+        el.style.maxHeight = 0;
+        el.style.maxHeight = `${el.scrollHeight}px`;
+      });
     }
   }
 }
@@ -26,14 +31,19 @@ export function expandCollapseAll(event, action = 'expand-all') {
   const elList = [...navEl.querySelectorAll('.nav-bar-tag-and-paths')];
   if (action === 'expand-all') {
     elList.forEach((el) => {
-      const navBarPathsUnderTagEl = el.querySelector('.nav-bar-paths-under-tag');
+      const navBarPathsUnderTagEls = el.querySelectorAll('.nav-bar-paths-under-tag');
       el.classList.replace('collapsed', 'expanded');
-      navBarPathsUnderTagEl.style.maxHeight = `${navBarPathsUnderTagEl?.scrollHeight}px`;
+      navBarPathsUnderTagEls.forEach((iel) => {
+        iel.style.maxHeight = `${iel?.scrollHeight}px`;
+      });
     });
   } else {
     elList.forEach((el) => {
       el.classList.replace('expanded', 'collapsed');
-      el.querySelector('.nav-bar-paths-under-tag').style.maxHeight = 0;
+      const pathsUnderTagEls = el.querySelectorAll('.nav-bar-paths-under-tag');
+      pathsUnderTagEls.forEach((iel) => {
+        iel.style.maxHeight = 0;
+      });
     });
   }
 }
@@ -46,6 +56,9 @@ export function navBarClickAndEnterHandler(event) {
   event.stopPropagation();
   if (navEl.dataset?.action === 'navigate') {
     this.scrollToEventTarget(event, false);
+    if (navEl.classList.contains('nav-bar-tag')) {
+      expandCollapseNavBarTag(navEl, 'toggle');
+    }
   } else if (navEl.dataset?.action === 'expand-all' || (navEl.dataset?.action === 'collapse-all')) {
     expandCollapseAll(event, navEl.dataset.action);
   } else if (navEl.dataset?.action === 'expand-collapse-tag') {
@@ -167,7 +180,7 @@ export default function navbarTemplate() {
 
       <!-- TAGS AND PATHS-->
       ${this.resolvedSpec.tags
-        .filter((tag) => tag.paths.filter((path) => pathIsInSearch(this.matchPaths, path, this.matchType)).length)
+        .filter((tag) => tag.paths.filter((path) => tag.expanded || pathIsInSearch(this.matchPaths, path, this.matchType)).length)
         .map((tag) => html`
           <div class='nav-bar-tag-and-paths ${(this.renderStyle === 'read' ? 'expanded' : (tag.expanded ? 'expanded' : 'collapsed'))}' >
             ${tag.name === 'General ⦂'
@@ -192,7 +205,7 @@ export default function navbarTemplate() {
                 ${this.renderStyle === 'focused' && this.onNavTagClick === 'expand-collapse'
                   ? ''
                   : html`
-                    <div class='tag-headers'>
+                    <div class='tag-headers nav-bar-paths-under-tag' style='max-height: 0px;'>
                       ${tag.headers.map((header) => html`
                       <div
                         class='nav-bar-h${header.depth} ${this.navActiveItemMarker}'

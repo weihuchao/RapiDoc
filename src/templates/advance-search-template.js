@@ -34,10 +34,6 @@ export default function searchByPropertiesModalTemplate() {
             <input style="cursor:pointer;" type="checkbox" part="checkbox checkbox-search-dialog" id="search-api-params" @change = "${(e) => this.onAdvancedSearch(e, 0)}">
             <label style="cursor:pointer;" for="search-api-params"> API Parameters </label>
           </div>
-          <div style="margin-left: 16px;">
-            <input style="cursor:pointer;" type="checkbox" part="checkbox checkbox-search-dialog" id="search-api-request-body" @change = "${(e) => this.onAdvancedSearch(e, 0)}">
-            <label style="cursor:pointer;" for="search-api-request-body"> Request Body Parameters </label>
-          </div>
         </div>
       </span>
       

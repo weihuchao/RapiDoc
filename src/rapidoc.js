@@ -673,10 +673,19 @@ export default class RapiDoc extends LitElement {
 
   onSearchChange(e) {
     this.matchPaths = e.target.value;
+    this.resolvedSpec.tags.forEach((tag) => {
+      tag.expanded = false;
+    });
     this.resolvedSpec.tags.forEach((tag) => tag.paths.filter((v) => {
       if (this.matchPaths) {
-        // v.expanded = false;
         if (pathIsInSearch(this.matchPaths, v, this.matchType)) {
+          tag.expanded = true;
+        }
+      }
+    }));
+    this.resolvedSpec.tags.forEach((tag) => [tag.name, tag.description].filter((v) => {
+      if (this.matchPaths) {
+        if (v.includes(this.matchPaths)) {
           tag.expanded = true;
         }
       }
