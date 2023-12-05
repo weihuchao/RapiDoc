@@ -180,7 +180,7 @@ export default function navbarTemplate() {
 
       <!-- TAGS AND PATHS-->
       ${this.resolvedSpec.tags
-        .filter((tag) => tag.paths.filter((path) => tag.expanded || pathIsInSearch(this.matchPaths, path, this.matchType)).length)
+        .filter((tag) => tag.paths.filter((path) => tag.expanded || tag.iexpanded || pathIsInSearch(this.matchPaths, path, this.matchType)).length)
         .map((tag) => html`
           <div class='nav-bar-tag-and-paths ${(this.renderStyle === 'read' ? 'expanded' : (tag.expanded ? 'expanded' : 'collapsed'))}' >
             ${tag.name === 'General ⦂'
@@ -223,6 +223,9 @@ export default function navbarTemplate() {
               <!-- Paths in each tag (endpoints) -->
               ${tag.paths.filter((v) => {
                 if (this.matchPaths) {
+                  if (tag.iexpanded) {
+                    return true;
+                  }
                   return pathIsInSearch(this.matchPaths, v, this.matchType);
                 }
                 return true;

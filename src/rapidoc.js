@@ -675,6 +675,7 @@ export default class RapiDoc extends LitElement {
     this.matchPaths = e.target.value;
     this.resolvedSpec.tags.forEach((tag) => {
       tag.expanded = false;
+      tag.iexpanded = false;
     });
     this.resolvedSpec.tags.forEach((tag) => tag.paths.filter((v) => {
       if (this.matchPaths) {
@@ -686,7 +687,7 @@ export default class RapiDoc extends LitElement {
     this.resolvedSpec.tags.forEach((tag) => [tag.name, tag.description].filter((v) => {
       if (this.matchPaths) {
         if (v.includes(this.matchPaths)) {
-          tag.expanded = true;
+          tag.iexpanded = true;
         }
       }
     }));
@@ -703,6 +704,10 @@ export default class RapiDoc extends LitElement {
     const searchEl = this.shadowRoot.getElementById('nav-bar-search');
     searchEl.value = '';
     this.matchPaths = '';
+    this.resolvedSpec.tags.forEach((tag) => {
+      tag.expanded = false;
+      tag.iexpanded = false;
+    });
     this.resolvedSpec.components.forEach((component) => component.subComponents.filter((v) => {
       v.expanded = true;
     }));
